@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sonia's Guessing Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+    <link href='http://fonts.googleapis.com/css?family=Exo|Monofett' rel='stylesheet' type='text/css'>
+    <link href="css/my-styles.css" rel="stylesheet" media="screen">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../../assets/js/html5shiv.js"></script>
+      <script src="../../assets/js/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+
+       <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        
+        <a class="navbar-brand text-muted" href="#">GuessingGame</a>
+        <div class="collapse navbar-collapse">
+
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="#">home</a></li>
+            <li><a href="#">about</a></li>
+          </ul>
+
+        </div>
+      </div>
+    </div>
+ 
+
+    <div class="container">      
+      <div class="jumbotron">
+        <h1>GuessingGame</h1>
+        <div class="row">
+          <div class="col-lg-6 col-md-offset-3">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="input 1-100">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button">Go!</button>
+              </span>
+            </div>
+          </div>
+        </div>
+        <p class="btn-group">
+          <a class="btn btn-success btn-lg" href="#">play again</a>
+          <a class="btn btn-default btn-lg" href="#">give me a hint</a>
+        </p>
+        <p>_ guesses remaining</p>
+      </div>
+    </div>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
+  </body>
+</html>

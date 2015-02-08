@@ -1,0 +1,43 @@
+/* Layout
+================================= */
+
+body {
+	padding-top: 250px;
+	font-family: 'Exo', sans-serif;
+	background-image: url("../img/wires.jpg");
+  background-repeat: no-repeat;
+}
+.container {
+	max-width: 1000px;
+}
+
+
+/* Jumbotron
+================================= */
+
+.jumbotron {
+	text-align: center;
+	background-color: rgba(0,0,0,0.75);
+	padding: 70px;
+  margin-bottom: 70px;
+  color: white;
+}
+
+.jumbotron h1,
+.navbar-brand {
+	font-family: 'Monofett', cursive;
+	color: #E3FF00;
+}
+
+.btn.btn-success,
+.btn.btn-default {
+	background-image: none;
+	background-color: rgba(0,0,0,0);
+	border-color: white;
+	color: white;
+}
+
+.btn.btn-success:hover {
+	background-color: #E3FF00;
+	color: black;
+}
