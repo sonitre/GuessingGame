@@ -44,20 +44,22 @@ var $lastGuess = undefined;
 $newGame = function() {
 
 		$("#submit").click(function(){
+			//while loop here??
 			if($guessCount < 4){
 				$guess = $("#userGuess").val();
 				$evaluateGuess($guess);
 				$guessCount++;
+				if($guessCount === 4 && $guess != $number){
+					$outputMessage("You've reached the end of your guessing limit.");
+					$outputMessage2("...that's the end of the game...")
+				}
 			}
-			else{
-				$outputSuccessMessage("You've reached the end of your guessing limit.");
-				$outputHotCold("...play again?")
-			}
+			$("#userGuess").val('');
 		});
 
 		$("#hint").click(function(){
-			$outputSuccessMessage("The number is " + $number);
-			$outputHotCold("...try guessing next time!");
+			$outputMessage("The number is " + $number);
+			$outputMessage2("...try guessing next time!");
 		});
 
 		$("#again").click(function(){
@@ -72,26 +74,27 @@ $newGame = function() {
 
 
 		$evaluateGuess = function(guess){
-			if($.isNumeric(guess) && guess < 100 & guess > 0){
+			//shouldn't increment guess when guess isNaN
+			if($.isNumeric(guess) && guess <= 100 & guess > 0){
 				if($checkRepeat(guess)){
-					$outputSuccessMessage("You already guessed that number! Try again.");
-					$outputHotCold("...you just lost a guess for that!");
+					$outputMessage("You already guessed that number! Try again.");
+					$outputMessage2("...you just lost a guess for that!");
 				}
 				else{
 					$hotOrCold(guess);
 				}
 			}
 			else{
-				$outputSuccessMessage("Please enter a number between 1 and 100!")
+				$outputMessage("Please enter a number between 1 and 100!")
 			}
 		};
 
-		$outputSuccessMessage = function(message){
+		$outputMessage = function(message){
 				$(".successMessage").show();
 				$(".successMessage").text(message);
 		};	
 
-		$outputHotCold = function(message){
+		$outputMessage2 = function(message){
 			$(".hotCold").show();
 			$(".hotCold").text(message);
 		}
@@ -129,26 +132,25 @@ $newGame = function() {
 
 			var diffA = Math.abs($number - $lastGuess);
 			var diffB = Math.abs($number - guess);
-			debugger;
 
 			if(diffB > diffA){
-				$outputHotCold("(...you're getting colder since your last guess...)");
+				$outputMessage2("(...you're getting colder since your last guess...)");
 			}
 			else {
-				$outputHotCold("(...you're getting warmer since your last guess...)");
+				$outputMessage2("(...you're getting warmer since your last guess...)");
 			}
 		};
 
+		//don't need to fade-in the table everytime??
 		$createUserTable = function(guess, result){
-			$(".guessTable").show();
+			$(".guessTable").fadeIn();
 			$(".guessTable").append("<tr><td>" + result+ "</td><td>" + guess + "</td></tr>");
 		};
 
 
 		$outputGenerator = function(screenMessage, message, guess){
-			$outputSuccessMessage(screenMessage);
-			$guessResult = message;
-			$createUserTable(guess, $guessResult);
+			$outputMessage(screenMessage);
+			$createUserTable(guess, message);
 		};
 
 
@@ -165,14 +167,17 @@ $newGame = function() {
 		//use fadein method here
 		$success = function(){
 			$(".jumbotron").addClass("success");
+
 			$(".jumbotron").animate({opacity: 0.4}, 500);
 			$("body").animate({opacity: 0.4}, 500, function(){
 				$(".jumbotron").animate({opacity: 1.0}, 500);
 				$("body").animate({opacity: 1.0}, 500);
 			});
-			$outputSuccessMessage("YOU GUESSED IT!");
-			$outputHotCold("click to play again, you winner!");
+
+			$outputMessage("YOU GUESSED IT!");
+			$outputMessage2("click to play again, you winner!");
 			$(".guessTable").hide();
+			$("#userGuess").val('');
 		};
 
 		$resetGame = function(){
