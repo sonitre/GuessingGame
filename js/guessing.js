@@ -74,7 +74,7 @@ $newGame = function() {
 
 
 		$evaluateGuess = function(guess){
-			//shouldn't increment guess when guess isNaN
+			//shouldn't increment guess when guess isNaN/ shouldn't show previous logged messages
 			if($.isNumeric(guess) && guess <= 100 & guess > 0){
 				if($checkRepeat(guess)){
 					$outputMessage("You already guessed that number! Try again.");
