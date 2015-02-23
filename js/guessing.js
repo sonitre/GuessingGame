@@ -1,54 +1,18 @@
-// Project Requirements:
 
-// When a game begins, there should be a random number generated between 1-100.
-// The user should have an input field where they can submit a guess.
-// After the user submits a guess, indicate whether their guess is 'hot' or 'cold'. Let the user know if they need to guess higher or lower.
-// Allow the user to guess only a certain amount of times. When they run out of guesses let them know the game is over.
-// Feel free to use prompts to get user input on your first version.
-// For the final version of your project, you'll need to create an HTML-based interface for getting user inputs and giving feedback on guesses.
-// Validate inputs that they are real numbers between 1-100.
-// Create a new game button that resets the game.
-// Store all of the guesses and create a way to check if the guess is a repeat.
-// Track the user's previous guess. Let them know if they are getting “hotter” or “colder” based on their previous guess.
-// Create a button that provides the answer (Give me a Hint).
-// Submit the guess by pressing enter or clicking the submit button.
-// After a user guesses a number keep a visual list of Hot and Cold answers that the user can see.
-// Change the background color, add an image, or do something creative when the user guesses the correct answer.
-
-//Objectives
-
-//1. Generate a random number between 1-100 and store in a variable
-//2. Allow the user to submit a guess
-	//2.1 Allow them to submit via pressing enter or clicking submit
-//3. Evaluate the guess
-	//3.1 Validate inputs to make sure they are real numbers between 1-100
-	//3.2 Store input and check whether user has already made that guess
-		//3.2.1 Keep a visual table/image of previous guesses
-	//3.3 Project information (hot/cold or higher/lower or "hotter/colder" based on previous guesses) to the screen using a modal?
-	//3.4 Evaluate whether user has reached guessing limit
-//4. Game
-	//4.1 Be able to tell user that the game is over
-	//4.2 Greate a new game button that resets the game
-	//4.3 Create a button that provides the answer (give me a hint)
-	//4.3 Create a success HTML event
-
-	//Notes:
-	// Fix issue where you need to submit an extra time before end message
-
+//Set initial variables, with random number generated
 var $number = Math.floor((Math.random()*100) + 1);
 var $guessCount = 0;
 var $guess;
-var $lastGuess = undefined;
+var $previousGuess = undefined;
 
-
+//Create a new game
 $newGame = function() {
 
+		//Takes user input and evaluates the guess, keeping count of # of guesses
 		$("#submit").click(function(){
-			//while loop here??
 			if($guessCount < 4){
 				$guess = $("#userGuess").val();
 				$evaluateGuess($guess);
-				$guessCount++;
 				if($guessCount === 4 && $guess != $number){
 					$outputMessage("You've reached the end of your guessing limit.");
 					$outputMessage2("...that's the end of the game...")
@@ -57,53 +21,51 @@ $newGame = function() {
 			$("#userGuess").val('');
 		});
 
-		$("#hint").click(function(){
-			$outputMessage("The number is " + $number);
-			$outputMessage2("...try guessing next time!");
-		});
-
-		$("#again").click(function(){
-			$resetGame();
-		});
-
+		//Activates the click function when enter is pressed
 		$("#userGuess").keypress(function(e){
 			if(e.which === 13){
 				$("#submit").click();
 			}
 		});
 
+		//Button to reveal answer
+		$("#hint").click(function(){
+			$outputMessage("The number is " + $number);
+			$outputMessage2("...try guessing next time!");
+		});
 
+		//Button to reset the game
+		$("#again").click(function(){
+			$resetGame();
+		});
+
+		//Evaluates guess by checking if it's a number, repeat, or valid guess
+		//and giving input to the user accordingly.
 		$evaluateGuess = function(guess){
-			//shouldn't increment guess when guess isNaN/ shouldn't show previous logged messages
 			if($.isNumeric(guess) && guess <= 100 & guess > 0){
 				if($checkRepeat(guess)){
-					$outputMessage("You already guessed that number! Try again.");
-					$outputMessage2("...you just lost a guess for that!");
+					$outputMessage("You already guessed that number!");
+					$outputMessage2("...Try again?");
 				}
 				else{
 					$hotOrCold(guess);
+					$guessCount++;
 				}
 			}
 			else{
 				$outputMessage("Please enter a number between 1 and 100!")
+				$outputMessage2("You won't win by being cheeky!");
 			}
 		};
 
-		$outputMessage = function(message){
-				$(".successMessage").show();
-				$(".successMessage").text(message);
-		};	
-
-		$outputMessage2 = function(message){
-			$(".hotCold").show();
-			$(".hotCold").text(message);
-		}
-
+		//Checks whether user guess is correct or,
+		//if its hot or cold,
+		//or hotter or colder based on previous input.
 		$hotOrCold = function(guess){
 			if(guess == $number){
 				$success();
 			}
-			else if($lastGuess == undefined){
+			else if($previousGuess == undefined){
 				$compareToNumber(guess);
 			}
 			else{
@@ -112,6 +74,7 @@ $newGame = function() {
 			}	
 		};
 
+		//Compares whether guess is hot or cold and generates visual output for user.
 		$compareToNumber = function(guess){
 			if(guess > $number && guess < $number + 25){
 				$outputGenerator("You're hot! Guess lower.", "Hot. Go lower.", guess);
@@ -125,12 +88,16 @@ $newGame = function() {
 			else if(guess < $number - 25){
 				$outputGenerator("You're ice cold! Guess higher", "Ice cold. Go higher.", guess);
 			}
-			$lastGuess = $("table tr").children().last().html()
-		}
 
+			//Stores the guessed number for comparison with future guesses.
+			$previousGuess = $("table tr").children().last().html()
+		};
+
+		//Compares whether guess is hotter or colder based on
+		//a previous guess.
 		$compareToGuesses = function(guess){
 
-			var diffA = Math.abs($number - $lastGuess);
+			var diffA = Math.abs($number - $previousGuess);
 			var diffB = Math.abs($number - guess);
 
 			if(diffB > diffA){
@@ -141,19 +108,48 @@ $newGame = function() {
 			}
 		};
 
-		//don't need to fade-in the table everytime??
-		$createUserTable = function(guess, result){
-			$(".guessTable").fadeIn();
-			$(".guessTable").append("<tr><td>" + result+ "</td><td>" + guess + "</td></tr>");
+		//Outputs message to first para of jumbotron
+		$outputMessage = function(message){
+				if($(".successMessage").is(':visible')){
+					$(".successMessage").text(message);
+				}
+				else {
+					$(".successMessage").show();
+					$(".successMessage").text(message);
+				}
+		};	
+
+		//Outputs message to second para of jumbotron
+		$outputMessage2 = function(message){
+			if($(".hotCold").is(':visible')){
+				$(".hotCold").text(message);
+			}
+			else{
+				$(".hotCold").show();
+				$(".hotCold").text(message);
+			}			
 		};
 
 
+		//Generates visual output for user on the jumbotron and a table.
 		$outputGenerator = function(screenMessage, message, guess){
 			$outputMessage(screenMessage);
 			$createUserTable(guess, message);
 		};
 
 
+		//Adds latest user guess to a table and reveals to user
+		$createUserTable = function(guess, result){
+			if($(".guessTable").is(':visible')){
+				$(".guessTable").append("<tr><td>" + result+ "</td><td>" + guess + "</td></tr>");
+			}
+			else{
+				$(".guessTable").fadeIn();
+				$(".guessTable").append("<tr><td>" + result+ "</td><td>" + guess + "</td></tr>");
+			}			
+		};
+
+		//Checks for repeat guesses
 		$checkRepeat = function(guess){
 			var isTrue = false
 			$("td").each(function(){
@@ -164,7 +160,7 @@ $newGame = function() {
 			return isTrue;
 		};
 
-		//use fadein method here
+		//Animation to be activated when guess is correct
 		$success = function(){
 			$(".jumbotron").addClass("success");
 
@@ -180,10 +176,11 @@ $newGame = function() {
 			$("#userGuess").val('');
 		};
 
+		//Resets the game
 		$resetGame = function(){
 			$number = Math.floor((Math.random()*100) + 1);
 			$guessCount = 0;
-			$lastGuess = undefined;
+			$previousGuess = undefined;
 			$(".successMessage").hide();
 			$(".hotCold").hide();
 			$("#userGuess").val('');

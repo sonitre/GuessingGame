@@ -1,4 +1,5 @@
-/* Layout
+
+/* General Layout
 ================================= */
 
 body {
@@ -52,6 +53,9 @@ body {
 	font-family: 'Monofett', cursive;
 }
 
+/* Hidden Paragraphs
+================================== */
+
 .successMessage {
 	color: white;
 	padding-top: 20px;
@@ -61,6 +65,9 @@ body {
 .hotCold {
 	display: none;
 }
+
+/* Hidden correct guess styling
+================================== */
 
 .success {
 	background-color: white;
